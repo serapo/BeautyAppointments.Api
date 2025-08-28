@@ -1,6 +1,6 @@
 # Beauty Appointments API 💇‍♀️💅
 
-Bu proje, **junior backend developer** yolculuğumda geliştirdiğim ilk API uygulamalarından biridir.  
+Bu proje, backend tarafında kendimi geliştirmek için yaptığım ilk API çalışmalarından biridir.
 Amaç, bir güzellik merkezi için **randevu yönetim sistemi** geliştirmektir.  
 
 ## 🚀 Teknolojiler
