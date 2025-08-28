@@ -11,9 +11,6 @@ FROM mcr.microsoft.com/dotnet/aspnet:8.0
 WORKDIR /app
 
 
-RUN apt-get update && apt-get install -y libicu && rm -rf /var/lib/apt/lists/*
-
-
 ENV DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=false
 
 COPY --from=build /app/out .
