@@ -38,7 +38,7 @@ using (var scope = app.Services.CreateScope())
     if (!db.Services.Any())
     {
         db.Services.AddRange(
-            new Service { Name = "Cilt Bakýmý", Price = 750, DurationMinutes = 60 },
+            new Service { Name = "Cilt Bakimi", Price = 750, DurationMinutes = 60 },
             new Service { Name = "Lazer Epilasyon", Price = 1200, DurationMinutes = 45 },
             new Service { Name = "Masaj", Price = 900, DurationMinutes = 50 }
         );
@@ -47,7 +47,7 @@ using (var scope = app.Services.CreateScope())
     if (!db.Customers.Any())
     {
         db.Customers.AddRange(
-            new Customer { FullName = "Ayþe Yýlmaz", Phone = "5551112233", Email = "ayse@example.com" },
+            new Customer { FullName = "Ayse Yilmaz", Phone = "5551112233", Email = "ayse@example.com" },
             new Customer { FullName = "Mehmet Demir", Phone = "5554445566", Email = "mehmet@example.com" }
         );
     }
