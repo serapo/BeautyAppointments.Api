@@ -9,10 +9,13 @@ builder.Services.AddDbContext<AppDbContext>(opt =>
     opt.UseSqlite(builder.Configuration.GetConnectionString("Default")));
 
 builder.Services.AddControllers()
-    .AddJsonOptions(options =>
+    .AddJsonOptions(o =>
     {
-        options.JsonSerializerOptions.Encoder = System.Text.Encodings.Web.JavaScriptEncoder.Create(System.Text.Unicode.UnicodeRanges.All);
+        o.JsonSerializerOptions.Encoder =
+            System.Text.Encodings.Web.JavaScriptEncoder.Create(
+                System.Text.Unicode.UnicodeRanges.All);
     });
+
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
