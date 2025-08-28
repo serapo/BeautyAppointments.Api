@@ -1,0 +1,6 @@
+@BeautyAppointments.Api_HostAddress = http://localhost:5153
+
+GET {{BeautyAppointments.Api_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

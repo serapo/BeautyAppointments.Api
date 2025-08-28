@@ -1,0 +1,5 @@
+﻿bin/
+obj/
+app.db
+app.db-journal
+.vs/ 

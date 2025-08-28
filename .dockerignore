@@ -1,0 +1,6 @@
+﻿bin/
+obj/
+*.db
+*.db-journal
+.git
+.gitignore
