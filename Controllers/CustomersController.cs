@@ -12,11 +12,53 @@ public class CustomersController : ControllerBase
     private readonly AppDbContext _db;
     public CustomersController(AppDbContext db) => _db = db;
 
+    static string Fold(string s) => string.IsNullOrWhiteSpace(s) ? string.Empty :
+    s.Replace('ç', 'c').Replace('Ç', 'c')
+     .Replace('ğ', 'g').Replace('Ğ', 'g')
+     .Replace('ı', 'i').Replace('I', 'i').Replace('İ', 'i')
+     .Replace('ö', 'o').Replace('Ö', 'o')
+     .Replace('ş', 's').Replace('Ş', 's')
+     .Replace('ü', 'u').Replace('Ü', 'u')
+     .ToLowerInvariant();
+
     // GET: api/customers
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<Customer>>> GetAll()
+    public async Task<ActionResult<PagedResult<Customer>>> GetAll(
+        [FromQuery] string? name= null,
+        [FromQuery] string? phone= null,
+        [FromQuery] string? email= null,
+        [FromQuery] int page=1,
+        [FromQuery] int pageSize= 10
+        )
     {
-        return await _db.Customers.ToListAsync();
+        var q =_db.Customers.AsQueryable();
+
+        if (!string.IsNullOrWhiteSpace(name))
+        {
+            var folded = Fold(name);
+            // NOT: Aşağıdaki Replace/ToLower zinciri EF Core tarafından SQLite'a translate edilir (REPLACE/LOWER)
+            q = q.Where(c =>
+                c.FullName
+                 .Replace("ç", "c").Replace("Ç", "c")
+                 .Replace("ğ", "g").Replace("Ğ", "g")
+                 .Replace("ı", "i").Replace("I", "i").Replace("İ", "i")
+                 .Replace("ö", "o").Replace("Ö", "o")
+                 .Replace("ş", "s").Replace("Ş", "s")
+                 .Replace("ü", "u").Replace("Ü", "u")
+                 .ToLower()
+                 .Contains(folded)
+            );
+        }
+
+        if (!string.IsNullOrWhiteSpace(phone))
+            q = q.Where(c => c.Phone.Contains(phone));
+
+        if (!string.IsNullOrWhiteSpace(email))
+            q = q.Where(c => c.Email.Contains(email));
+
+        q = q.OrderBy(c => c.Id);
+
+        return await q.ToPagedResultAsync(page, pageSize);
     }
 
     // GET: api/customers/5
