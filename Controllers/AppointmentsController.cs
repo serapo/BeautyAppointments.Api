@@ -14,12 +14,42 @@ public class AppointmentsController : ControllerBase
 
     // GET: api/appointments
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<Appointment>>> GetAll()
+    public async Task<ActionResult<PagedResult<Appointment>>> GetAll(
+        [FromQuery] DateTime? from = null,
+        [FromQuery] DateTime? to = null,
+        [FromQuery] int? customerId = null,
+        [FromQuery] int? serviceId = null,
+        [FromQuery] string? status = null,
+        [FromQuery] int page = 1,
+        [FromQuery] int pageSize = 20)
     {
-        return await _db.Appointments
-                        .Include(a => a.Customer)
-                        .Include(a => a.Service)
-                        .ToListAsync();
+        if(page <= 0 ) page = 1;
+        if(pageSize <= 0 || pageSize > 100) pageSize = 20;
+
+        var q = _db.Appointments
+                   .Include(a => a.Customer)
+                   .Include(a => a.Service)
+                   .AsQueryable();
+
+        if(from.HasValue ) q = q.Where(a => a.StartTime >= from.Value);
+        if (to.HasValue) q = q.Where(a => a.StartTime <= to.Value);
+        if (customerId.HasValue) q = q.Where(a => a.CustomerId == customerId.Value);
+        if (serviceId.HasValue) q = q.Where(a => a.ServiceId == serviceId.Value);
+        if (!string.IsNullOrWhiteSpace(status)) q = q.Where(a => a.Status == status);
+
+        var total = await q.CountAsync();
+        var items = await q.OrderBy(a => a.StartTime)
+                           .Skip((page - 1) * pageSize)
+                           .Take(pageSize)
+                           .ToListAsync();
+
+        return new PagedResult<Appointment>
+        {
+            Items = items,
+            Page = page,
+            PageSize = pageSize,
+            TotalCount = total
+        };
     }
 
     // GET: api/appointments/5
