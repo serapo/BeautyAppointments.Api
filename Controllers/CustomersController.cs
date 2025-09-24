@@ -36,7 +36,6 @@ public class CustomersController : ControllerBase
         if (!string.IsNullOrWhiteSpace(name))
         {
             var folded = Fold(name);
-            // NOT: Aşağıdaki Replace/ToLower zinciri EF Core tarafından SQLite'a translate edilir (REPLACE/LOWER)
             q = q.Where(c =>
                 c.FullName
                  .Replace("ç", "c").Replace("Ç", "c")

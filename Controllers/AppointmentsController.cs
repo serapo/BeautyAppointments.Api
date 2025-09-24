@@ -1,7 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using BeautyAppointments.Api.Data;
+﻿using BeautyAppointments.Api.Data;
 using BeautyAppointments.Api.Domain;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace BeautyAppointments.Api.Controllers;
 
@@ -66,6 +67,7 @@ public class AppointmentsController : ControllerBase
     }
 
     // POST: api/appointments
+    [Authorize]
     [HttpPost]
     public async Task<ActionResult<Appointment>> Create(Appointment appointment)
     {
@@ -84,6 +86,7 @@ public class AppointmentsController : ControllerBase
     }
 
     // PUT: api/appointments/5
+    [Authorize]
     [HttpPut("{id}")]
     public async Task<IActionResult> Update(int id, Appointment updated)
     {
@@ -112,6 +115,7 @@ public class AppointmentsController : ControllerBase
     }
 
     // DELETE: api/appointments/5
+    [Authorize]
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(int id)
     {
