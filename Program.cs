@@ -5,16 +5,19 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.OpenApi.Models;
+using System.IdentityModel.Tokens.Jwt;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
+JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
 // JWT config
 var jwtSection = builder.Configuration.GetSection("Jwt");
 var jwtKey = jwtSection.GetValue<string>("Key");
 var jwtIssuer = jwtSection.GetValue<string>("Issuer");
 var jwtAudience = jwtSection.GetValue<string>("Audience");
 
-Console.WriteLine($"[JWT-BOOT] issuer={jwtIssuer}, audience={jwtAudience}, keylen={jwtKey?.Length}, keyhead={jwtKey?[..Math.Min(4, jwtKey.Length)]}");
+Console.WriteLine($"[JWT-BOOT] issuer={jwtIssuer}, audience={jwtAudience}, keylen={jwtKey}, keyhead={jwtKey?[..Math.Min(4, jwtKey.Length)]}");
 
 builder.Services
     .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)

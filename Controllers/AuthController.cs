@@ -10,6 +10,7 @@ using BeautyAppointments.Api.Domain;
 using Microsoft.AspNetCore.Authorization;
 
 
+
 namespace BeautyAppointments.Api.Controllers;
 
 [ApiController]
@@ -97,8 +98,10 @@ public class AuthController : ControllerBase
     [HttpGet("me")]
     public async Task<IActionResult> Me()
     {
-      var sub = User.FindFirst(System.IdentityModel.Tokens.Jwt.JwtRegisteredClaimNames.Sub)?.Value;
-        if(string.IsNullOrEmpty(sub) || !int.TryParse(sub, out var userId))
+        var sub = User.FindFirst(System.IdentityModel.Tokens.Jwt.JwtRegisteredClaimNames.Sub)?.Value
+             ?? User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+        if (string.IsNullOrEmpty(sub) || !int.TryParse(sub, out var userId))
             return Unauthorized();
 
         var user = await _db.Users.FindAsync(userId);
